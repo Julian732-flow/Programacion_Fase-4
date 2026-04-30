@@ -1,0 +1,2 @@
+class ClienteError(Exception):
+    pass

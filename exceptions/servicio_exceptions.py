@@ -1,0 +1,2 @@
+class ServicioError(Exception):
+    pass
