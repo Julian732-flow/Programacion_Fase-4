@@ -1,7 +1,10 @@
 
 def mostrar_menu():
-    print("\n--- Sistema de Reservas ---")
-    print("1. Crear cliente")
-    print("2. Crear servicio")
-    print("3. Crear reserva")
-    print("4. Salir")
+    print("\n" + "=" * 35)
+    print("   SISTEMA DE RESERVAS - SOFTWARE FJ")
+    print("=" * 35)
+    print("1. Gestión de Clientes")
+    print("2. Menu de Servicios")
+    print("3. Salir")
+    print("=" * 35)
+    
