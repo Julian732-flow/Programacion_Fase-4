@@ -1,10 +1,13 @@
 from utils.input_utils import obtener_opcion
 
+# Importa funciones para registrar logs
 from utils.logger import (
     log_error,
     log_success
 )
 
+# Importa funciones para mostrar mensajes
+# en consola al usuario
 from utils.mensajes import (
     mostrar_ok,
     mostrar_error,
@@ -12,6 +15,8 @@ from utils.mensajes import (
     mostrar_warning
 )
 
+# Importa la lógica de negocio relacionada
+# con las asesorías
 from services.asesorias_service import (
     crear_asesoria,
     obtener_asesorias,
@@ -20,6 +25,8 @@ from services.asesorias_service import (
 )
 
 
+# Menú principal de asesorías
+# Controla la navegación entre opciones
 def menu_asesorias():
 
     while True:
@@ -31,11 +38,13 @@ def menu_asesorias():
         print("4. Eliminar Asesoría")
         print("5. Volver al menú principal")
 
+        # Solicita una opción válida al usuario
         opcion = obtener_opcion(
             "Seleccione una opción: ",
             ["1", "2", "3", "4", "5"]
         )
 
+        # Redirecciona según la opción elegida
         if opcion == "1":
             menu_agendar_asesoria()
 
@@ -52,12 +61,14 @@ def menu_asesorias():
             break
 
 
+# Menú para crear una nueva asesoría
 def menu_crear_asesoria():
 
     print("\n--- Crear Asesoría ---")
 
     try:
 
+        # Solicita datos de la asesoría
         nombre = input(
             "Nombre de la asesoría: "
         ).strip()
@@ -70,17 +81,20 @@ def menu_crear_asesoria():
             input("Precio por sesión: ").strip()
         )
 
+        # Llama al service para crear la asesoría
         asesoria = crear_asesoria(
             nombre,
             especialista,
             precio_por_sesion
         )
 
+        # Muestra mensaje de éxito
         mostrar_ok(
             f"Asesoría creada correctamente: "
             f"{asesoria['nombre']}"
         )
 
+        # Registra el evento en logs
         log_success(
             f"Asesoría creada: {asesoria['nombre']}",
             "CREAR_ASESORIA"
@@ -88,11 +102,13 @@ def menu_crear_asesoria():
 
     except ValueError as e:
 
+        # Registra errores de validación
         log_error(str(e), "CREAR_ASESORIA")
         mostrar_error(str(e))
 
     except Exception as e:
 
+        # Registra errores inesperados
         log_error(str(e), "CREAR_ASESORIA")
 
         mostrar_error(
@@ -100,14 +116,17 @@ def menu_crear_asesoria():
         )
 
 
+# Menú para visualizar las asesorías registradas
 def menu_ver_asesorias():
 
     print("\n--- Lista de Asesorías ---")
 
     try:
 
+        # Obtiene las asesorías almacenadas
         asesorias = obtener_asesorias()
 
+        # Valida si existen asesorías registradas
         if not asesorias:
 
             mostrar_info(
@@ -116,6 +135,7 @@ def menu_ver_asesorias():
 
             return
 
+        # Recorre e imprime cada asesoría
         for i, asesoria in enumerate(asesorias, 1):
 
             print(
@@ -127,6 +147,7 @@ def menu_ver_asesorias():
 
     except Exception as e:
 
+        # Registra errores al obtener asesorías
         log_error(str(e), "VER_ASESORIAS")
 
         mostrar_error(
@@ -134,14 +155,17 @@ def menu_ver_asesorias():
         )
 
 
+# Menú para eliminar una asesoría
 def menu_eliminar_asesoria():
 
     print("\n--- Eliminar Asesoría ---")
 
     try:
 
+        # Obtiene las asesorías registradas
         asesorias = obtener_asesorias()
 
+        # Valida si existen asesorías
         if not asesorias:
 
             mostrar_warning(
@@ -150,18 +174,23 @@ def menu_eliminar_asesoria():
 
             return
 
+        # Muestra la lista de asesorías
         menu_ver_asesorias()
 
+        # Solicita el índice a eliminar
         indice = input(
             "\nIngrese el número de la asesoría a eliminar: "
         ).strip()
 
+        # Elimina la asesoría seleccionada
         eliminar_asesoria(int(indice) - 1)
 
+        # Muestra mensaje de éxito
         mostrar_ok(
             "Asesoría eliminada correctamente"
         )
 
+        # Registra el evento en logs
         log_success(
             f"Asesoría eliminada. Índice: {indice}",
             "ELIMINAR_ASESORIA"
@@ -169,18 +198,22 @@ def menu_eliminar_asesoria():
 
     except Exception as e:
 
+        # Registra errores del proceso
         log_error(str(e), "ELIMINAR_ASESORIA")
         mostrar_error(str(e))
 
 
+# Menú para agendar una asesoría
 def menu_agendar_asesoria():
 
     print("\n--- Agendar Asesoría ---")
 
     try:
 
+        # Obtiene las asesorías registradas
         asesorias = obtener_asesorias()
 
+        # Valida si existen asesorías disponibles
         if not asesorias:
 
             mostrar_warning(
@@ -189,26 +222,32 @@ def menu_agendar_asesoria():
 
             return
 
+        # Muestra las asesorías registradas
         menu_ver_asesorias()
 
+        # Solicita la asesoría a seleccionar
         indice = input(
             "\nSeleccione el número de la asesoría: "
         ).strip()
 
+        # Solicita la cantidad de sesiones
         sesiones = input(
             "Cantidad de sesiones: "
         ).strip()
 
+        # Calcula el total del agendamiento
         resultado = agendar_asesoria(
             int(indice) - 1,
             int(sesiones)
         )
 
+        # Muestra mensaje de éxito
         mostrar_ok(
             f"Asesoría agendada correctamente. "
             f"Total: ${resultado['total']}"
         )
 
+        # Registra el evento en logs
         log_success(
             f"Asesoría agendada: {resultado['asesoria']}",
             "AGENDAR_ASESORIA"
@@ -216,5 +255,6 @@ def menu_agendar_asesoria():
 
     except Exception as e:
 
+        # Registra errores del proceso
         log_error(str(e), "AGENDAR_ASESORIA")
         mostrar_error(str(e))
