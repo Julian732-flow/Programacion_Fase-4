@@ -16,4 +16,8 @@ def mostrar_ok(mensaje):
 def mostrar_info(mensaje):
     print(_formatear("INFO", mensaje))
     _separador()
+    
+def mostrar_warning(mensaje):
+    print(_formatear("WARNING", mensaje))
+    _separador()
 
