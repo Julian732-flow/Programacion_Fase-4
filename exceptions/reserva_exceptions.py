@@ -1,2 +1,0 @@
-class ReservaError(Exception):
-    pass
